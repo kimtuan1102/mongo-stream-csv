@@ -6,20 +6,26 @@ const http = require("http");
 const server = http.createServer(app);
 // set up port number
 const port = 3000;
-const bodyParser= require('body-parser');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
 const csv = require("./controller");
-const { MongoClient } = require('mongodb');
-mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(()=> {
+const {MongoClient} = require('mongodb');
+mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() => {
         console.log('Database connected');
     })
-    .catch((error)=> {
+    .catch((error) => {
         console.log(error)
         console.log('Error connecting to database');
     });
 let count = 0
 // set up home route
+app.get('/connections', (req, res) => {
+    server.getConnections((error, count) => {
+        console.log(count)
+    })
+    res.send("ol");
+})
 app.get('/', async (request, respond) => {
     server.getConnections((error, count) => console.log(count))
     await new Promise(resolve => setTimeout(resolve, 5000));
